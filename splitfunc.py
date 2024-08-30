@@ -37,6 +37,6 @@ async def splitfunc(splitmessage):
       partslist = sorted(listofparts)
       for part in partslist :
         vidpart = f"{vidsplitdir+part}"
-        partcaption = vidsplitmsg.caption + ' جـ'+ str(partslist.index(part)+1)
+        partcaption = splitmessage.caption + ' جـ'+ str(partslist.index(part)+1)
         sentpart = await bot.send_video(splittyaudid,vidpart,caption=partcaption)
       shutil.rmtree(vidsplitdir)
