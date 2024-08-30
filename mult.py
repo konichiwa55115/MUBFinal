@@ -20,7 +20,6 @@ from twitterupld import *
 from ytdlpfunc import *
 from ytupld import *
 from upldtofbpage import *
-from upld2arch import *
 from extract import *
 from splitfunc import *
 from color import *
@@ -69,53 +68,6 @@ async def command9(bot,message):
   bucketname = bucketname.replace(" ", "")
   await message.reply_text("تم ضبط المعرف ")
   
-@bot.on_message(filters.private & filters.incoming & filters.text & filters.regex(ytregex) | filters.regex('permalink.php') |filters.regex('story.php') | filters.regex('facebook') | filters.regex('https') | filters.regex('http') )
-async def _telegram_file(client, message):
- if not (await pyro_fsub(bot, message,fsub) == True):
-            return
- if message.from_user.id not in premiumids : 
-   pass
- else : 
-   if 'playlist' in message.text:
-     global ytplsturl,ytplstid
-     ytplsturl = message.text
-     ytplstid = message.from_user.id
-     CHOOSE_UR_SCRAPPLST_MODE = " اختر صيغة التحميل "
-     CHOOSE_UR_SCRAPPLST_MODE_BUTTONS = [
-       [InlineKeyboardButton("فيديو",callback_data="videocallback1")],
-       [InlineKeyboardButton("صوتية",callback_data="audiocallback1")]
-          ]
-     await message.reply(text = CHOOSE_UR_SCRAPPLST_MODE,reply_markup = InlineKeyboardMarkup(CHOOSE_UR_SCRAPPLST_MODE_BUTTONS))
-   elif 'drive.google.com/file' in message.text :
-    gdowndir = "./gdowndir/"
-    if os.path.isdir(gdowndir) == False : 
-      os.mkdir(gdowndir)
-    p = subprocess.Popen(["gdown", "--fuzzy",message.text],cwd=gdowndir)
-    p.wait()
-    dlfile = os.listdir(gdowndir)[0]
-    leechedfile = gdowndir + dlfile
-    dlfilex = '.' + dlfile.split('.')[-1]
-    if dlfilex in audioforms :
-         await bot.send_audio(message.from_user.id,leechedfile)
-    elif dlfilex in videoforms :
-         await bot.send_video(message.from_user.id,leechedfile)
-    else : 
-         await bot.send_document(message.from_user.id,leechedfile)
-    os.remove(leechedfile)
-     
-     
-   else : 
-     global yt_id , ytlink
-     ytlink = message.text
-     yt_id = message.from_user.id
-     CHOOSE_UR_SCRAP_MODE = " اختر صيغة التحميل "
-     CHOOSE_UR_SCRAP_MODE_BUTTONS = [
-       [InlineKeyboardButton("فيديو",callback_data="videocallyback")],
-       [InlineKeyboardButton("صوتية",callback_data="audiocallback")],
-        [InlineKeyboardButton("رابط مباشر",callback_data="directurl")]
-          ]
-     await message.reply(text = CHOOSE_UR_SCRAP_MODE,reply_markup = InlineKeyboardMarkup(CHOOSE_UR_SCRAP_MODE_BUTTONS))
-      
 
 @bot.on_message(filters.command('ytsub') & filters.text & filters.private)
 async def command20(bot,message):
@@ -247,21 +199,21 @@ async def _telegram_file(client, message):
    if (exo in videoforms and len(vidsrt) == 1 and  vidsrt[0].video ) or (exo in subtitleforms and len(vidsrt) == 1 and not vidsrt[0].video) :
     pass
    else :
-    await vidsrtfunc(client,nepho,replo)
+    await vidsrtfunc(nepho,replo)
     del globals()['vidsrtid']
     return
  if 'imagetovidid' in globals() and imagetovidid == nepho.from_user.id and ( exo in audioforms or exo in imageforms) :
       if (exo in audioforms and len(montaglist) == 1 and not montaglist[0].photo ) or (exo in imageforms and len(montaglist) == 1 and (montaglist[0].photo)) :
         pass 
       else :
-         await imagetovidfunc(client,nepho,replo)
+         await imagetovidfunc(nepho,replo)
          del globals()['imagetovidid']
          return 
  if 'vidaudsubid' in globals() and vidaudsubid == nepho.from_user.id and ( exo in audioforms or exo in videoforms) :
     if (exo in audioforms and len(vidsubslist) == 1 and not vidsubslist[0].video ) or (exo in videoforms and len(vidsubslist) == 1 and (vidsubslist[0].video)) :
         pass 
     else :
-         await vidaudsub(client,nepho,replo)
+         await vidaudsub(nepho,replo)
          del globals()['vidaudsubid']
          return 
  if 'zipfileid' in globals() and zipfileid == nepho.from_user.id :
@@ -370,30 +322,30 @@ async def _telegram_file(client, message):
           
   elif CallbackQuery.data == "mod1":
       await CallbackQuery.edit_message_text("جار التضخيم ")
-      await amplify(5)
+      await amplify(5,amplemessage)
       await CallbackQuery.edit_message_text("تم التضخيم ✅  ")
 
   elif CallbackQuery.data == "mod2":
       await CallbackQuery.edit_message_text("جار التضخيم ")
-      await amplify(10)
+      await amplify(10,amplemessage)
       await CallbackQuery.edit_message_text("تم التضخيم ✅  ")
          
       
   elif CallbackQuery.data == "mod3":
       await CallbackQuery.edit_message_text("جار التضخيم ")
-      await amplify(15)
+      await amplify(15,amplemessage)
       await CallbackQuery.edit_message_text("تم التضخيم ✅  ") 
         
 
   elif CallbackQuery.data == "mod4" :
       await CallbackQuery.edit_message_text("جار التضخيم ")
-      await amplify(20)
+      await amplify(20,amplemessage)
       await CallbackQuery.edit_message_text("تم التضخيم ✅  ")
          
 
   elif CallbackQuery.data == "mod5":
       await CallbackQuery.edit_message_text("جار التضخيم ")
-      await amplify(25)
+      await amplify(25,amplemessage)
       await CallbackQuery.edit_message_text("تم التضخيم ✅  ") 
         
 
@@ -517,12 +469,12 @@ async def _telegram_file(client, message):
       
   elif CallbackQuery.data == "slow1":
    await CallbackQuery.edit_message_text("جار التبطيئ")
-   await slowfunc(1.25,0.8)
+   await slowfunc(slowmessage,1.25,0.8)
    await CallbackQuery.edit_message_text("تم التبطيء ✅  ") 
      
   elif CallbackQuery.data == "slow2":
    await CallbackQuery.edit_message_text("جار التبطيئ")
-   await slowfunc(1.5,0.66666666666)
+   await slowfunc(slowmessage,1.5,0.66666666666)
    await CallbackQuery.edit_message_text("تم التبطيء ✅  ") 
      
 
@@ -547,24 +499,24 @@ async def _telegram_file(client, message):
          CHOOSE_UR_CONV_MODE = "اختر نمط التحويل"
          CHOOSE_UR_CONV_MODE_BUTTONS = [[InlineKeyboardButton("تحويل صوتية/ فيديو إلى mp3",callback_data="audconv")],[InlineKeyboardButton("تحويل صوتية/ فيديو إلى m4a",callback_data="audconvm4a")],[InlineKeyboardButton("تحويل فيديو إلى mp4 ",callback_data="vidconv")]]
 
-           await CallbackQuery.edit_message_text(text = CHOOSE_UR_CONV_MODE,reply_markup = InlineKeyboardMarkup(CHOOSE_UR_CONV_MODE_BUTTONS))
+         await CallbackQuery.edit_message_text(text = CHOOSE_UR_CONV_MODE,reply_markup = InlineKeyboardMarkup(CHOOSE_UR_CONV_MODE_BUTTONS))
       
 
   elif CallbackQuery.data == "audconv" :
    await CallbackQuery.edit_message_text("جار التحويل ") 
-   await convy("mp3file")
+   await convy("mp3file",convmessage)
    await CallbackQuery.edit_message_text("تم التحويل ✅  ") 
    
 
   elif CallbackQuery.data == "audconvm4a" :
    await CallbackQuery.edit_message_text("جار التحويل ") 
-   await convy("m4afile")
+   await convy("m4afile",convmessage)
    await CallbackQuery.edit_message_text("تم التحويل ✅  ") 
    
    
   elif CallbackQuery.data == "vidconv" :
    await CallbackQuery.edit_message_text("جار التحويل ") 
-   await convy("mp4file")
+   await convy("mp4file",convmessage)
    await CallbackQuery.edit_message_text("تم التحويل ✅  ") 
    
 
@@ -615,7 +567,7 @@ async def _telegram_file(client, message):
      global subsmessage,vidaudsubid
      subsmessage = nepho
      vidaudsubid = subsmessage.from_user.id
-     await vidaudsub(bot,subsmessage,replo)
+     await vidaudsub(subsmessage,replo)
     
 
 
@@ -626,7 +578,7 @@ async def _telegram_file(client, message):
         global imagetovidid,imagetovidmessage
         imagetovidmessage = nepho
         imagetovidid = imagetovidmessage.from_user.id
-        await imagetovidfunc(bot,imagetovidmessage,replo)
+        await imagetovidfunc(imagetovidmessage,replo)
 
      
 
@@ -824,8 +776,10 @@ async def _telegram_file(client, message):
          audmergemessage = nepho
          mergeid = audmergemessage.from_user.id
          await replo.delete()
-         audmergelist.clear()
-         audmergedel.clear()
+         if 'audmergelist' in globals():
+            globals()['audmergelist'].clear()
+         if 'audmergedel' in globals():
+            globals()['audmergedel'].clear()
          await audmerge(audmergemessage)
          
         elif exo in videoforms : 
@@ -834,8 +788,10 @@ async def _telegram_file(client, message):
             global vidmergeid
             vidmergeid = vidmergemessage.from_user.id
             await replo.delete()
-            vidmergelist.clear()
-            vidmergedel.clear()
+            if globals()['vidmergelist'] :
+             vidmergelist.clear()
+            if globals()['vidmergedel'] :
+             vidmergedel.clear()
             await videomerge(vidmergemessage)
           else : 
            await CallbackQuery.edit_message_text("هذه الميزة متوفرة لمالك البوت فقط")
@@ -846,8 +802,11 @@ async def _telegram_file(client, message):
           global photomergeid
           photomergeid = imgmergemessage.from_user.id
           await replo.delete()
-          imagedic.clear()
-          photomergedel.clear()
+          if 'imagedic' in globals():
+            globals()['imagedic'].clear()
+          if 'photomergedel' in globals():
+            globals()['photomergedel'].clear()
+            
           await photomerge(imgmergemessage)
           
         elif exo == ".pdf":
@@ -856,11 +815,12 @@ async def _telegram_file(client, message):
           pdfmergeid = pdfmergemessage.from_user.id
           pdfmergeid2 = pdfmergemessage.from_user.id
           await replo.delete()
-          pdfmergedel.clear()
-          pdfqueemerge.clear()
+          if 'pdfmergedel' in globals():
+            globals()['pdfmergedel'].clear()
+          if 'pdfqueemerge' in globals():
+            globals()['pdfqueemerge'].clear()
           await pdfmerge(pdfmergemessage)
           
-      
       
 
   elif CallbackQuery.data == "mergenow":
@@ -871,7 +831,7 @@ async def _telegram_file(client, message):
          pass
     del globals()['mergeid']
     await CallbackQuery.edit_message_text("جار الدمج ⏳ ") 
-    await audmerge(audmergelist)
+    await audmerge1(audmergelist)
     await CallbackQuery.edit_message_text("تم الدمج  ✅  ")
     
     
@@ -884,7 +844,7 @@ async def _telegram_file(client, message):
          pass
       del globals()['pdfmergeid']
       await CallbackQuery.edit_message_text("جار الدمج ⏳ ")
-      await pdfmerge(pdfqueemerge)
+      await pdfmerge1(pdfqueemerge)
       await CallbackQuery.edit_message_text("تم الدمج  ✅  ")
    
 
@@ -1044,7 +1004,7 @@ async def _telegram_file(client, message):
     global vidsrtmessage,vidsrtid
     vidsrtmessage = nepho
     vidsrtid = vidsrtmessage.from_user.id
-    await vidsrtfunc(bot,vidsrtmessage,replo)
+    await vidsrtfunc(vidsrtmessage,replo)
 
   
   ######### خاصية عكس الـpdf  #########
@@ -1129,13 +1089,14 @@ async def _telegram_file(client, message):
 
   elif  CallbackQuery.data == "zipnow" :
     await CallbackQuery.edit_message_text("جار الأرشفة  ⏱️  ")
-    zipfile = f"{globals()['zipnom']}.zip"
-    shutil.make_archive(globals()['zipnom'], 'zip', './zipdir/')
-    await bot.send_document(zipfileid,zipfile)
-    await CallbackQuery.edit_message_text("تمت الأرشفة  ✅  ")
+    del globals()['zipfileid']
+    zipdir = './zipdir/'
+    zipnom = str(random.randint(0,1000))
+    zipfile = await zipfunc1(zipdir,zipnom,zipfilequee)
+    await bot.send_document(zipfilequee[-1].from_user.id,zipfile)
     os.remove(zipfile)
-    shutil.rmtree("./zipdir/")
-    zipfileid = -1
+    shutil.rmtree(zipdir)
+    await CallbackQuery.edit_message_text("تمت الأرشفة  ✅  ")
     
 
     ############خواص الاستخراج ###########
@@ -1150,13 +1111,12 @@ async def _telegram_file(client, message):
         elif exo == ".pdf":
          await CallbackQuery.edit_message_text("جار الاستخراج ⏱️")
          extractdir = await pdfextract(unzipmessage,False)
-         zipnom = unzipmessage.document.file_name.split('.')[0]
-         shutil.make_archive(zipnom, 'zip',unzippath)
+         zipfile = await zipfunc1(extractdir,unzipmessage.document.file_name.split('.')[0])
          await bot.send_document(unzipmessage.from_user.id,zipfile)
          os.remove(zipfile)
          images = os.listdir(extractdir)
          for x in sorted(images):
-          await bot.send_photo(filemessage.from_user.id,extractdir+x)
+          await bot.send_photo(unzipmessage.from_user.id,extractdir+x)
          shutil.rmtree(extractdir)
          await CallbackQuery.edit_message_text("تم الاستخراج  ✅  ")
          
@@ -1465,7 +1425,7 @@ async def _telegram_file(client, message):
     await CallbackQuery.edit_message_text("عفواً ، لقد انتهت مدة الاختيار ، أرسل الملف مجدداً ")
           
  
-     
+
  
  @bot.on_message(filters.private & filters.reply)
  async def refunc(client,message):
@@ -1486,8 +1446,7 @@ async def _telegram_file(client, message):
            startend = re.split('-',endstart)
            strt_point=startend[0] 
            end_point = startend[1]
-           CHOOSE_UR_TRIMMODE = "اختر نمط القص"
-            CHOOSE_UR_TRIMMODE_BUTTONS = [[InlineKeyboardButton("قص عادي",callback_data="normaltrim")],[InlineKeyboardButton("قص معكوس",callback_data="reversetrim")]]
+           CHOOSE_UR_TRIMMODE = "اختر نمط القص" ;CHOOSE_UR_TRIMMODE_BUTTONS = [[InlineKeyboardButton("قص عادي",callback_data="normaltrim")],[InlineKeyboardButton("قص معكوس",callback_data="reversetrim")]]
           await message.reply(text = CHOOSE_UR_TRIMMODE,reply_markup = InlineKeyboardMarkup(CHOOSE_UR_TRIMMODE_BUTTONS))
           
           
@@ -1565,5 +1524,52 @@ async def _telegram_file(client, message):
              await bot.send_document(renmid,newfile)
           os.remove(newfile)
           del globals()["renmmessage"]
-          
+@bot.on_message(filters.private & filters.incoming & filters.text & filters.regex(ytregex) | filters.regex('permalink.php') |filters.regex('story.php') | filters.regex('facebook') | filters.regex('https') | filters.regex('http') )
+async def _telegram_file(client, message):
+ if not (await pyro_fsub(bot, message,fsub) == True):
+            return
+ if message.from_user.id not in premiumids : 
+   pass
+ else : 
+   if 'playlist' in message.text:
+     global ytplsturl,ytplstid
+     ytplsturl = message.text
+     ytplstid = message.from_user.id
+     CHOOSE_UR_SCRAPPLST_MODE = " اختر صيغة التحميل "
+     CHOOSE_UR_SCRAPPLST_MODE_BUTTONS = [
+       [InlineKeyboardButton("فيديو",callback_data="videocallback1")],
+       [InlineKeyboardButton("صوتية",callback_data="audiocallback1")]
+          ]
+     await message.reply(text = CHOOSE_UR_SCRAPPLST_MODE,reply_markup = InlineKeyboardMarkup(CHOOSE_UR_SCRAPPLST_MODE_BUTTONS))
+   elif 'drive.google.com/file' in message.text :
+    gdowndir = "./gdowndir/"
+    if os.path.isdir(gdowndir) == False : 
+      os.mkdir(gdowndir)
+    p = subprocess.Popen(["gdown", "--fuzzy",message.text],cwd=gdowndir)
+    p.wait()
+    dlfile = os.listdir(gdowndir)[0]
+    leechedfile = gdowndir + dlfile
+    dlfilex = '.' + dlfile.split('.')[-1]
+    if dlfilex in audioforms :
+         await bot.send_audio(message.from_user.id,leechedfile)
+    elif dlfilex in videoforms :
+         await bot.send_video(message.from_user.id,leechedfile)
+    else : 
+         await bot.send_document(message.from_user.id,leechedfile)
+    os.remove(leechedfile)
+     
+     
+   else : 
+     global yt_id , ytlink
+     ytlink = message.text
+     yt_id = message.from_user.id
+     CHOOSE_UR_SCRAP_MODE = " اختر صيغة التحميل "
+     CHOOSE_UR_SCRAP_MODE_BUTTONS = [
+       [InlineKeyboardButton("فيديو",callback_data="videocallyback")],
+       [InlineKeyboardButton("صوتية",callback_data="audiocallback")],
+        [InlineKeyboardButton("رابط مباشر",callback_data="directurl")]
+          ]
+     await message.reply(text = CHOOSE_UR_SCRAP_MODE,reply_markup = InlineKeyboardMarkup(CHOOSE_UR_SCRAP_MODE_BUTTONS))
+      
+ 
 bot.run()
