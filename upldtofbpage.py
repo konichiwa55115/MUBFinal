@@ -4,7 +4,6 @@ import os,requests
 
 async def upldtofbpage(pageid,accesstoken,x,replo):
     fbpageid = pageid
-    accesstoken = FBAPI
     fbpath = await x.download(file_name="./downloads/")
     files = {'source': open(fbpath, 'rb')}
     payload = {

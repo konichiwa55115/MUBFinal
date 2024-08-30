@@ -1,9 +1,10 @@
 from PDFNetPython3.PDFNetPython import PDFDoc, Optimizer, SDFDoc, PDFNet
 from os import system as cmd
+import os
 from config import bot
 
 
-async def compressaud(rate,compmessage):
+async def compressaud(rate,audcompmessage):
     comppath = await audcompmessage.download(file_name="./downloads/")
     filename = os.path.basename(comppath)
     nom,ex = os.path.splitext(filename)

@@ -1,4 +1,5 @@
 from os import system as cmd
+import os
 from config import checkdir,bot
 import pypdfium2 as pdfium
 from zipfile import ZipFile 
@@ -28,14 +29,14 @@ async def pdfextract(filemessage,greyscale) :
             annotations=True,
             greyscale=greyscale,
             optimise_mode=pdfium.OptimiseMode.NONE,)
-         pil_image.save(f"./{extractpath}/image_{str(page_number+1).zfill(5)}.png")
+         pil_image.save(f"./{unzippath}/image_{str(page_number+1).zfill(5)}.png")
         os.remove(pdffilepath)
         return unzippath
          
 ############ استخراج zip #####
 
 
-async def unzipfunc(unzipmessage)
+async def unzipfunc(unzipmessage):
          unzipfilepath = await unzipmessage.download(file_name="./downloads/")
          unzipzipid = unzipmessage.from_user.id
          unzippath = "./unzipprocess/"
@@ -84,4 +85,3 @@ async def ebupextract(epubmsg):
            os.remove(epubpath)
            
   
-

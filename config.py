@@ -10,10 +10,10 @@ temptxt = "res.txt"
 
 async def checkdir(dir):
   if os.path.isdir(dir):
-      shutil.rmtree(pdfocrdir)
+      shutil.rmtree(dir)
   os.mkdir(dir)
  
-async def getdur(twittervidpath)
+async def getdur(twittervidpath): 
      cap = cv2.VideoCapture(twittervidpath)
      fps = cap.get(cv2.CAP_PROP_FPS)
      totalNoFrames = cap.get(cv2.CAP_PROP_FRAME_COUNT)
@@ -25,7 +25,7 @@ bot = Client(
     "MultiUsageBotFinal",
     api_id=17983098,
     api_hash="ee28199396e0925f1f44d945ac174f64",
-    bot_token="5782497998:AAFdx2dX3yeiyDIcoJwPa_ghY2h_dozEh_E"
+    bot_token="6032076608:AAGhqffAlibHd7pipzA3HR2-0Ca3sDFlmdI"
 )
 #6032076608:AAGhqffAlibHd7pipzA3HR2-0Ca3sDFlmdI 
 #5782497998:AAFdx2dX3yeiyDIcoJwPa_ghY2h_dozEh_E

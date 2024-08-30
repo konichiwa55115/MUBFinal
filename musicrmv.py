@@ -2,7 +2,7 @@ import os,cv2,shutil
 from config import videoforms, audioforms,checkdir,getdur,bot
 
 async def musicrmv(x,z):
-  tempnom = 54388953228
+  tempnom = '54388953228'
   tempmp3 = f"{tempnom}.mp3"
   rmvmessage = x
   mscrmvid = rmvmessage.from_user.id

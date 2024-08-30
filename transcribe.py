@@ -1,4 +1,5 @@
 from os import system as cmd
+import os
 import requests,pytesseract
 from config import checkdir,bot
 
@@ -31,7 +32,7 @@ async def ocrfunc(langcode,imgocrmsg):
     data = requests.get(data_url, allow_redirects=True, headers={'User-Agent': 'Mozilla/5.0'})
     open(path, 'wb').write(data.content)
     if imgocrmsg.photo :
-    imgocrpath = imgocrmsg.download(file_name="./downloads/")
+     imgocrpath = imgocrmsg.download(file_name="./downloads/")
     else :
       imgocrpath = imgocrmsg
     text = pytesseract.image_to_string(imgocrpath, lang=langcode)
@@ -64,7 +65,7 @@ async def pdfocrfunc(langcode,pdfmessage):
     )
      pil_image.save(f"./temp/image_{page_number+1}.png")
     os.remove(filepath) 
-    for x in range(1,len(os.listdir(pdfocrdir)))
+    for x in range(1,len(os.listdir(pdfocrdir))):
      cmd(f'''sh textcleaner -g "./temp/image_{x}.png" "image_{x}.png" ''')
      textspaced = await ocrfunc(langcode,f"image_{x}.png")
      open(resultfile,'a').write(f'{textspaced} \n')

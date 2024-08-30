@@ -1,6 +1,6 @@
 from os import system as cmd
 from config import checkdir,bot
-import shutil
+import shutil,os
 
 ##########
 
@@ -29,8 +29,8 @@ async def splitfunc(splitmessage):
     os.remove(splitpath) 
   
   elif splitmessage.video :
-    vidsplitdir = './vidsplitparts/'
-    vidsplitpath = await splitmessage.download(file_name=vidsplitdir)
+      vidsplitdir = './vidsplitparts/'
+      vidsplitpath = await splitmessage.download(file_name=vidsplitdir)
       cmd(f"python3 ffmpeg-split.py -f '{vidsplitpath}' -s 130")
       os.remove(vidsplitpath)
       listofparts = os.listdir(vidsplitdir)

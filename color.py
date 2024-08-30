@@ -12,9 +12,9 @@ async def Coloringfunc(y,colormessage):
      nom,ex = os.path.splitext(filename)
      imgfile = f"{nom}.jpg"
      await colorpic(color,colorpath,imgfile) 
-      await bot.send_photo(imgid,imgfile)
-      os.remove(colorpath)
-      os.remove(imgfile)
+     await bot.send_photo(imgid,imgfile)
+     os.remove(colorpath)
+     os.remove(imgfile)
    elif exo == ".pdf":
     if color == "g":
      extractdir = await pdfextract(colormessage,True)

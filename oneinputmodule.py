@@ -1,5 +1,6 @@
 from config import audioforms,videoforms,bot
 from os import system as cmd
+import os
 from pydub import AudioSegment
 import noisereduce as nr
 import numpy as np
@@ -30,7 +31,7 @@ async def noisermvfunc(path,mp3file):
 
 ######### التضخيم #####
 
-async def amplify(amplemode):
+async def amplify(amplemode,amplemessage):
  amplepath = await amplemessage.download(file_name="./downloads/")
  filename = os.path.basename(amplepath)
  nom,ex = os.path.splitext(filename)
@@ -52,7 +53,7 @@ async def amplify(amplemode):
         
 ################## التحويل 
 
-async def convy(k):
+async def convy(k,convmessage):
    convpath = await convmessage.download(file_name="./downloads/")
    filename = os.path.basename(convpath)
    nom,ex = os.path.splitext(filename)
@@ -99,7 +100,7 @@ async def spoody(speedmessage,spdrateaud,spdratevid):
        
 ############ التبطيء
 
-async def slowfunc(spdratevid,spdrateaud):
+async def slowfunc(slowmessage,spdratevid,spdrateaud):
     slowpath = await slowmessage.download(file_name="./downloads/")
     filename = os.path.basename(slowpath)
     nom,ex = os.path.splitext(filename)

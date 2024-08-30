@@ -18,7 +18,8 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 from apiclient import http, errors, discovery
 from oauth2client.file import Storage
 from typing import Optional, Tuple, Union
-
+from config import bot
+from pyrogram.types import InlineKeyboardMarkup , InlineKeyboardButton , ReplyKeyboardMarkup , CallbackQuery, ForceReply,Message
 ###################
 
 async def progress(

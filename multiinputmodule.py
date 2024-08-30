@@ -1,9 +1,10 @@
-audmergelist,audmergedel,vidmergedel , vidmergelist,imagedic,imagepdfdic,imagepdfdic1,photomergedel,imgpdflist,photomergedel,pdfqueemerge,pdfs= [],[],[],[],[],[],[],[],[],[],[],[],[]
+audmergelist,audmergedel,vidmergedel , vidmergelist,imagedic,imagepdfdic,imagepdfdic1,photomergedel,imgpdflist,photomergedel,pdfqueemerge,pdfmergedel,pdfs,zipfilequee= [],[],[],[],[],[],[],[],[],[],[],[],[],[]
 
 from PIL import Image
 from pypdf import PdfMerger
-import os,random
-from config import checkdur,bot
+import os,random,shutil
+from asyncstdlib.functools import reduce
+from config import checkdir,bot
 from pyrogram.types import InlineKeyboardMarkup , InlineKeyboardButton , ReplyKeyboardMarkup , CallbackQuery , ForceReply,Message
 
 ######## دمج الصوتيات #######
@@ -19,7 +20,7 @@ async def audmerge(x):
      audnowpull = await x.reply(text = CHOOSE_UR_MERGE,reply_markup = InlineKeyboardMarkup(CHOOSE_UR_MERGE_BUTTONS))
      audmergedel.append(audnowpull)
      
-async def audmerge(audmergelist):
+async def audmerge1(audmergelist):
     mergedir = "./mergy/"
     await checkdir(mergedir)
     for x in range(0,len(audmergelist)) :
@@ -31,10 +32,10 @@ async def audmerge(audmergelist):
      if ex == '.mp3' :
        os.replace(audmergepath,mergedir+tempmp3)
      else :
-      cmd(f'''ffmpeg -i "{audmergepath}" -q:a 0 -map a "{mergedir+tempmp3}" -y ''')
+      os.system(f'''ffmpeg -i "{audmergepath}" -q:a 0 -map a "{mergedir+tempmp3}" -y ''')
       os.remove(audmergepath)
      open('list.txt','a').write(f"file '{mergedir+tempmp3}' \n")
-    cmd(f'''ffmpeg -f concat -safe 0 -i list.txt "{mp3file}" -y ''')
+    os.system(f'''ffmpeg -f concat -safe 0 -i list.txt "{mp3file}" -y ''')
     await bot.send_audio(audmergelist[-1].from_user.id, mp3file)
     os.remove("list.txt")
     os.remove(mp3file)
@@ -54,7 +55,7 @@ async def videomerge(x):
      vidnowpull = await x.reply(text = CHOOSE_UR_VIDMERGE_MODE,reply_markup = InlineKeyboardMarkup(CHOOSE_UR_VIDMERGE_MODE_BUTTONS))
      vidmergedel.append(vidnowpull)
      
-async def vidmerge(vidmergelist)
+async def vidmerge(vidmergelist):
      vidmergdir = "./data/"
      await checkdir(vidmergdir)
      for x in range(0,len(vidmergelist)):
@@ -86,12 +87,12 @@ async def photomerge(x):
       imagepullnow = await x.reply(text = PRESS_MERGE_IMAGE,reply_markup = InlineKeyboardMarkup(PRESS_MERGE_IMAGE_BUTTONS))
       photomergedel.append(imagepullnow)
       
-async def imgmerge(imagedic,mergemode)
+async def imgmerge(imagedic,mergemode):
      imgmergid = imagedic[-1].from_user.id
      for x in range(0,len(imagedic)):
       imgpath = await imagedic[x].download(file_name="./downloads/")
       imagedic[x] = imgpath
-     finalphoto = await reduce(merge_images2,imagedic)
+     finalphoto = await reduce(mergemode,imagedic)
      await bot.send_document(imgmergid,finalphoto)
      await bot.send_photo(imgmergid,finalphoto)
      imagedic.clear()
@@ -161,16 +162,20 @@ async def pdfmerge(x):
         for y in pdfmergedel:
          await y.delete()
        pdfqueemerge.append(x)
+       CHOOSE_UR_PDFMERGE_MODE = " بعد الانتهاء من إرسال الملفات اضغط دمج الآن "
+       CHOOSE_UR_PDFMERGE_MODE_BUTTONS = [[InlineKeyboardButton("دمج الآن ",callback_data="pdfmergenow")]]
+
        pdfpullnow = await x.reply(text = CHOOSE_UR_PDFMERGE_MODE,reply_markup = InlineKeyboardMarkup(CHOOSE_UR_PDFMERGE_MODE_BUTTONS))
        pdfmergedel.append(pdfpullnow)
        
-async def pdfmerge(pdfqueemerge) :
+async def pdfmerge1(pdfqueemerge) :
+      merger = PdfMerger()
       for x in pdfqueemerge:
        pdfmergepath = await x.download(file_name="./downloads/")
        filename = os.path.basename(pdfmergepath)
-       PdfMerger().append(pdfmergepath)
-      PdfMerger().write(filename)
-      PdfMerger().close()
+       merger.append(pdfmergepath)
+      merger.write(filename)
+      merger.close()
       await  bot.send_document(pdfqueemerge[-1].from_user.id,filename)
       os.remove(filename)
       pdfqueemerge.clear()
@@ -190,7 +195,7 @@ async def image2pdf(x):
       imagepullnow = await x.reply(text = THE_LAST_IMAGE,reply_markup = InlineKeyboardMarkup(THE_LAST_IMAGE_BUTTONS))
       photomergedel.append(imagepullnow)
       
-async def img2pdf1(imgpdflist,sendid=None)
+async def img2pdf1(imgpdflist,sendid=None):
     for x in imgpdflist :
       if not x.document :
        pdfdir = './img2pdf/'
@@ -226,16 +231,22 @@ async def zipfilefunc(x):
     if len(pdfmergedel) != 0 :
         for y in pdfmergedel:
          await y.delete()
-    zipfilepath = await x.download(file_name="./downloads/")
-    filename = os.path.basename(zipfilepath)
-    nom,ex = os.path.splitext(filename)
-    global zipnom
-    zipnom = nom
-    cmd('mkdir zipdir')
-    mergeviditem = f"./zipdir/{filename}"
-    os.rename(zipfilepath,mergeviditem)
+    zipfilequee.append(x)
+    PRESS_ZIP_FILE = "بعد الانتهاء من إرسال الملفات , اضغط تحويل الآن "
+    PRESS_ZIP_FILE_BUTTONS = [
+        [InlineKeyboardButton("تحويل الآن",callback_data="zipnow")]]
     pdfpullnow = await x.reply(text =PRESS_ZIP_FILE,reply_markup = InlineKeyboardMarkup(PRESS_ZIP_FILE_BUTTONS))
     pdfmergedel.append(pdfpullnow)
 
 
-
+async def zipfunc1(dir,nom,quee=None):
+  zipfile = nom + '.zip'
+  if not quee == None :
+    await checkdir(dir)
+    for x in quee:
+       zipfilepath = await x.download(file_name=dir)
+  shutil.make_archive(nom, 'zip',dir)
+  return zipfile
+  
+  
+    
